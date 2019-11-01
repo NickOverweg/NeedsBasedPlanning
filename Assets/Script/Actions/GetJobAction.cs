@@ -5,7 +5,7 @@ using UnityEngine;
 public class GetJobAction : GAction
 {
     //adjust the cost to make the planner favor this more or less.
-    public float cost = 1f;
+    //public float cost = 1f;
 
     //adjust duration in case you have an action that lasts a long time
     //or if you intend to make the costs relative to the duration

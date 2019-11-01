@@ -191,7 +191,7 @@ public class GAgent : MonoBehaviour
     {
         gameObject.AddComponent<GoToBlackBoardAction>();
         gameObject.AddComponent<MoveToAction>();
-        gameObject.AddComponent<UseBlackBoardAction>();
+        gameObject.AddComponent<GetJobAction>();
         
     }
 
