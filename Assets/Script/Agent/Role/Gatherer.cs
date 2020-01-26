@@ -38,12 +38,10 @@ public class Gatherer : MonoBehaviour, IGoap
     {
         Dictionary<string, object> worldState = new Dictionary<string, object>();
 
-        worldState.Add("hasGathered", true);
-        worldState.Add("isAtLocation", agent.transform.position);
+        //worldState.Add("hasGathered", true);
+        //worldState.Add("isAtLocation", agent.transform.position);
         worldState.Add("hasStored", false);
-
-
-
+        
         return worldState;
 
     }
@@ -62,6 +60,15 @@ public class Gatherer : MonoBehaviour, IGoap
     public void PlanFound(Dictionary<string, object> goal, Queue<GAction> actions)
     {
         Debug.Log("<color=green>Plan found</color> " + actions);
+
+        GAction[] ActionQ = actions.ToArray();
+
+        foreach(GAction act in ActionQ)
+        {
+            Debug.Log(act.GetType());
+        }
+
+
     }
 
 

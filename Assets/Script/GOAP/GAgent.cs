@@ -213,7 +213,8 @@ public class GAgent : MonoBehaviour
     {
         Vector3 direction = destination.position - gameObject.transform.position;
 
-        gameObject.transform.position += direction.normalized * moveSpeed;
+        if (Vector3.Distance(destination.position, gameObject.transform.position) < moveSpeed) gameObject.transform.position = destination.position;
+        else gameObject.transform.position += direction.normalized * moveSpeed; ;
     }
 
 }
