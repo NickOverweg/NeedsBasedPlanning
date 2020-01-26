@@ -82,8 +82,8 @@ public class VillagerRole : MonoBehaviour, IGoap
     public void PlanFailed(Dictionary<string, object> failedGoal)
     {
         // what to do in case of a failed goal, how can the worldState be changed to allow for a different outcome?
-
         
+        Debug.Log("<color=red>Planning FAILED</color> unable to find actions for:" + failedGoal);
     }
 
     public void PlanFound(Dictionary<string, object> goal, Queue<GAction> actions)

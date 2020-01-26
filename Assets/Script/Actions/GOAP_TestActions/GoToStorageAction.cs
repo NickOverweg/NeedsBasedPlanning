@@ -1,8 +1,8 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActionTemplate : GAction
+public class GoToStorageAction : GAction
 {
     //adjust the cost to make the planner favor this more or less.
     //public float cost = 1f;
@@ -11,6 +11,8 @@ public class ActionTemplate : GAction
     //or if you intend to make the costs relative to the duration
     private float duration = 1f;
 
+    public Transform storageLocation;
+
     //Use this getter to run code if you want the duration to be dynamic
     //public new float Duration
     //{
@@ -18,21 +20,30 @@ public class ActionTemplate : GAction
     //}
 
 
-    public ActionTemplate()
+    public GoToStorageAction()
     {
         //add preconditions and effects to the respective dictionaries so the planner 
         //knows what to add or remove
- 
+
         //AddPrecondition("hasWood", false);
         //AddEffect("hasWood", true);
+
+        AddEffect("atStorageLocation", true);         
     }
 
-    public override bool IsDone() 
+    public void Start()
+    {
+        var store = GameObject.Find("Storage");
+        storageLocation = store.transform;
+        Debug.Log(storageLocation);
+    }
+
+    public override bool IsDone()
     {
         //return false while the action is being done 
         //and true after it has comitted the effects to the state.
 
-        return false;
+        return done;
     }
 
     public override void ResetVariables()
@@ -40,14 +51,14 @@ public class ActionTemplate : GAction
         //clear any saved variables so the action can be used again.
 
         isInitialized = false;
-        done = false;
     }
 
     public override bool CheckProceduralPrecondition(GAgent agent)
     {
-        //Check preconditions to agent conditions to see if the action is able to be planned or not. 
+        //Check any preconditions that can possibly change 
+        //from something other than this agents' actions
 
-        return false;
+        return true;
     }
 
     public override bool Perform(GAgent agent)
@@ -56,8 +67,11 @@ public class ActionTemplate : GAction
         //return false if something makes it unable to finish executing it's task.
         if (!isInitialized) Initialize(agent);
 
+        agent.MoveTowards(storageLocation);
 
-        return false;
+        if (agent.transform.position == storageLocation.position) done = true;
+        return true;
+        
     }
 
     private void Initialize(GAgent agent)
@@ -67,3 +81,4 @@ public class ActionTemplate : GAction
 
     }
 }
+

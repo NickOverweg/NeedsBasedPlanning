@@ -15,6 +15,9 @@ using System.Collections.Generic;
  * 
  * It also provides an interface for the planner to give 
  * feedback to the Agent and report success/failure.
+ * 
+ * Because this is responsible for creating a goal state, 
+ * this can be used as the input for agent needs
  */
 public interface IGoap
 {

@@ -8,7 +8,5 @@ public class AgentInventory : MonoBehaviour
     public int numWater;
     public int numFood;
 
-
-
-
+    public int gathered;
 }

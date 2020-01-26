@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +12,10 @@ public class GAgent : MonoBehaviour
 
     public GameObject Target;
     
+    [SerializeField]
     public float moveSpeed = 1;
+
+    public AgentInventory inventory;
 
     private HashSet<GAction> availableActions;
     private Queue<GAction> currentActions;
@@ -47,6 +51,12 @@ public class GAgent : MonoBehaviour
         availableActions = new HashSet<GAction>();
         currentActions = new Queue<GAction>();
         planner = new GPlanner();
+
+
+        //availableActions.
+        //gameObject.GetComponents<GAction>()
+
+        inventory = GetComponent<AgentInventory>();
 
         FindDataProvider();
         FindBlackBoard();
@@ -106,7 +116,10 @@ public class GAgent : MonoBehaviour
             }
             else
             {
-                Debug.Log("Planning failed! Goal: " + goalState);
+                
+                Debug.Log("Planning failed! Goal: ");
+                Debug.Log(goalState.Keys.First());
+
                 worldDataProvider.PlanFailed(goalState);
                 fsm.PopState();
                 fsm.PushState(planningState);
@@ -157,7 +170,7 @@ public class GAgent : MonoBehaviour
     private void FindDataProvider()
     {
         worldDataProvider = gameObject.GetComponent<IGoap>();
-        if (worldDataProvider == null) worldDataProvider = gameObject.AddComponent<VillagerRole>();
+        if (worldDataProvider == null) worldDataProvider = gameObject.AddComponent<Gatherer>();
         //
     }
 
@@ -184,7 +197,9 @@ public class GAgent : MonoBehaviour
         foreach (GAction a in actions)
         {
             availableActions.Add(a);
+            //Debug.Log("Added action: " + a.GetType());
         }
+        
     }
 
     public void AddBasicActions()
@@ -192,7 +207,13 @@ public class GAgent : MonoBehaviour
         gameObject.AddComponent<GoToBlackBoardAction>();
         gameObject.AddComponent<MoveToAction>();
         gameObject.AddComponent<GetJobAction>();
-        
+    }
+
+    public void MoveTowards(Transform destination)
+    {
+        Vector3 direction = destination.position - gameObject.transform.position;
+
+        gameObject.transform.position += direction.normalized * moveSpeed;
     }
 
 }

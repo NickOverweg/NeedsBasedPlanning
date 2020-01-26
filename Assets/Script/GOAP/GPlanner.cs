@@ -99,6 +99,9 @@ public class GPlanner
 
     //Makes a new set of actions by removing one action from a set of actions.
     //SUBSET? WHY? This removes the possibility for repeating actions later in the tree. 
+    //on the other hand this forces smaller goals to be set, which is probably for the best. 
+    //should probably make an exception for movement?
+    //
     private HashSet<GAction> ActionSubset(HashSet<GAction> actions, GAction removeMe)
     {
         HashSet<GAction> subset = new HashSet<GAction>(actions);
@@ -110,12 +113,22 @@ public class GPlanner
     //check if a state is in a goalstate.
     private bool IsInState(Dictionary<string, object> goalState, Dictionary<string, object> testState)
     {
-        Dictionary<string, object> differences = testState.Where(entry => goalState[entry.Key] != entry.Value)
-            .ToDictionary(entry => entry.Key, entry => entry.Value);
+        if (goalState.Count == 0) return true;
 
-        if (differences.Count > 0) return false;
+        //test for missing keys
+        if (goalState.Keys.Except(testState.Keys).Count() > 0) return false;
 
-        return true;
+        bool isInState = goalState.Keys.All(key => testState.ContainsKey(key) && testState[key].Equals(goalState[key]));
+
+        return isInState;
+
+        //Dictionary<string, object> differences = testState.Where(entry => goalState.ElementAtOrDefault entry.Key != entry.Value)
+        //   .ToDictionary(entry => entry.Key, entry => entry.Value);
+        
+
+        //if (differences.Count > 0) return false;
+
+        //return true;
     }
 
     private Dictionary<string, object> PopulateState(Dictionary<string, object> currentState, Dictionary<string, object> stateChanges)

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActionTemplate : GAction
+public class StoreAction : GAction
 {
     //adjust the cost to make the planner favor this more or less.
     //public float cost = 1f;
@@ -11,6 +11,8 @@ public class ActionTemplate : GAction
     //or if you intend to make the costs relative to the duration
     private float duration = 1f;
 
+
+
     //Use this getter to run code if you want the duration to be dynamic
     //public new float Duration
     //{
@@ -18,21 +20,27 @@ public class ActionTemplate : GAction
     //}
 
 
-    public ActionTemplate()
+    public StoreAction()
     {
         //add preconditions and effects to the respective dictionaries so the planner 
         //knows what to add or remove
- 
+
         //AddPrecondition("hasWood", false);
         //AddEffect("hasWood", true);
+
+        AddPrecondition("atStorageLocation", true);
+        AddPrecondition("hasGathered", true);
+        AddEffect("hasGathered", false);
+        AddEffect("hasStored", true);
+
     }
 
-    public override bool IsDone() 
+    public override bool IsDone()
     {
         //return false while the action is being done 
         //and true after it has comitted the effects to the state.
 
-        return false;
+        return done;
     }
 
     public override void ResetVariables()
@@ -45,9 +53,10 @@ public class ActionTemplate : GAction
 
     public override bool CheckProceduralPrecondition(GAgent agent)
     {
-        //Check preconditions to agent conditions to see if the action is able to be planned or not. 
+        //Check any preconditions that can possibly change 
+        //from something other than this agents' actions
 
-        return false;
+        return true;
     }
 
     public override bool Perform(GAgent agent)
@@ -56,8 +65,12 @@ public class ActionTemplate : GAction
         //return false if something makes it unable to finish executing it's task.
         if (!isInitialized) Initialize(agent);
 
+        agent.inventory.gathered--;
+        Debug.Log("Gathered succes!!!!");
 
-        return false;
+        done = true;
+        return true;
+        
     }
 
     private void Initialize(GAgent agent)
@@ -67,3 +80,4 @@ public class ActionTemplate : GAction
 
     }
 }
+
