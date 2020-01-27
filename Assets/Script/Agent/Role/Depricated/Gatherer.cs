@@ -67,8 +67,6 @@ public class Gatherer : MonoBehaviour, IGoap
         {
             Debug.Log(act.GetType());
         }
-
-
     }
 
 
@@ -77,5 +75,10 @@ public class Gatherer : MonoBehaviour, IGoap
     void Update()
     {
         
+    }
+
+    public object CheckWorldState(string keyToCheck)
+    {
+        throw new System.NotImplementedException();
     }
 }

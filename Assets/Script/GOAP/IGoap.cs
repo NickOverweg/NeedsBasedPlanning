@@ -28,6 +28,11 @@ public interface IGoap
 	 */
     Dictionary<string, object> GetWorldState();
 
+    /** 
+     * Use this to check a single value.
+     */
+    object CheckWorldState(string keyToCheck);
+
     /**
 	 * Give the planner a new goal so it can figure out 
 	 * the actions needed to fulfill it.

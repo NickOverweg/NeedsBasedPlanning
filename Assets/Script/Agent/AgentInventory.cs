@@ -5,8 +5,15 @@ using UnityEngine;
 public class AgentInventory : MonoBehaviour
 {
     public int numWood;
-    public int numWater;
+    public int numLeaf;
     public int numFood;
 
     public int gathered;
+
+    private void Start()
+    {
+        numFood = 0;
+        numLeaf = 0;
+        numWood = 0;
+    }
 }

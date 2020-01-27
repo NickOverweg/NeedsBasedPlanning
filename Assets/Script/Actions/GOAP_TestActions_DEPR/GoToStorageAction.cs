@@ -67,7 +67,7 @@ public class GoToStorageAction : GAction
         //return false if something makes it unable to finish executing it's task.
         if (!isInitialized) Initialize(agent);
 
-        agent.MoveTowards(storageLocation);
+        //agent.MoveTowards(storageLocation);
 
         if (agent.transform.position == storageLocation.position) done = true;
         return true;

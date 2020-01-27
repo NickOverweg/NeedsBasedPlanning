@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GatherWoodAction : GAction
+public class GatherWoodActionDEPR : GAction
 {
     private bool woodGathered = false;
 
     private float startTime = 0f;
     public float GatherDuration = 2;
 
-    public GatherWoodAction()
+    public GatherWoodActionDEPR()
     {
         AddPrecondition("hasWood", false);
         AddPrecondition("nearTarget", false);

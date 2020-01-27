@@ -10,7 +10,9 @@ public class GFSM
 
     public void Update(GAgent agent)
     {
-        if(stateStack.Peek() != null)
+
+        
+        if(stateStack.Count > 0 && stateStack.Peek() != null)
         {
             stateStack.Peek().Invoke(this, agent);
         }

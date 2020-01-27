@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AgentInventory), typeof(AgentStats))]
 public class GAgent : MonoBehaviour
 {
     private GFSM stateMachine;
@@ -11,11 +12,18 @@ public class GAgent : MonoBehaviour
     private GFSM.IGFSMState performActionState;
 
     public GameObject Target;
-    
-    [SerializeField]
-    public float moveSpeed = 1;
+
+    public float moveSpeed = 1000f;
+
+    public GameObject campfire;
+    public GameObject bed;
+
+    public bool RepeatAfterFinish = false;
 
     public AgentInventory inventory;
+    public AgentStats stats;
+
+    public LocationType lastKnownLocation;
 
     private HashSet<GAction> availableActions;
     private Queue<GAction> currentActions;
@@ -29,22 +37,6 @@ public class GAgent : MonoBehaviour
         get { return blackBoard; }
     }
 
-    private MaslowLevel maslowLevel = MaslowLevel.none;
-
-    public MaslowLevel MasLevel
-    {
-        get { return maslowLevel; }
-        set { maslowLevel = value; }
-    }
-
-    public bool NearTarget
-    {
-        get { return nearTarget; }
-        set { nearTarget = value; }
-    }
-
-    private bool nearTarget = false;
-
     private void Start()
     {
         stateMachine = new GFSM();
@@ -57,6 +49,8 @@ public class GAgent : MonoBehaviour
         //gameObject.GetComponents<GAction>()
 
         inventory = GetComponent<AgentInventory>();
+        
+        stats = GetComponent<AgentStats>();
 
         FindDataProvider();
         FindBlackBoard();
@@ -161,7 +155,7 @@ public class GAgent : MonoBehaviour
             else
             {
                 fsm.PopState();
-                fsm.PushState(planningState);
+                if(RepeatAfterFinish) fsm.PushState(planningState);
                 worldDataProvider.ActionsFinished();
             }
         };
@@ -202,19 +196,33 @@ public class GAgent : MonoBehaviour
         
     }
 
-    public void AddBasicActions()
+    public void BuildCampfire()
     {
-        gameObject.AddComponent<GoToBlackBoardAction>();
-        gameObject.AddComponent<MoveToAction>();
-        gameObject.AddComponent<GetJobAction>();
+        Vector3 campfireLocation = new Vector3(transform.position.x, 0, transform.position.z + 3);
+        GameObject instance = Instantiate(campfire, campfireLocation, Quaternion.identity);
+        stats.campfire = instance.transform;
     }
 
-    public void MoveTowards(Transform destination)
+    public void BuildBed()
     {
-        Vector3 direction = destination.position - gameObject.transform.position;
+        Vector3 bedLocation = new Vector3(transform.position.x, 0, transform.position.z);
+        GameObject instance = Instantiate(bed, bedLocation, Quaternion.identity);
+        stats.bed = instance.transform;
+    }
 
-        if (Vector3.Distance(destination.position, gameObject.transform.position) < moveSpeed) gameObject.transform.position = destination.position;
-        else gameObject.transform.position += direction.normalized * moveSpeed; ;
+    public void AddBasicActions()
+    {
+
+    }
+
+    public void MoveTowards(Vector3 destination)
+    {
+        Vector3 direction = destination - gameObject.transform.position;
+
+        if (Vector3.Distance(destination, gameObject.transform.position) < moveSpeed) gameObject.transform.position = destination;
+        else gameObject.transform.position += direction.normalized * moveSpeed;
+
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x, 1, gameObject.transform.position.z);
     }
 
 }

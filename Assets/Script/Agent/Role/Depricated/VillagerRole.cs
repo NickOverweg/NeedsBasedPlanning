@@ -43,16 +43,16 @@ public class VillagerRole : MonoBehaviour, IGoap
 
         worldData.Add("hasWood", inventory.numWood > 0);
         worldData.Add("hasFood", inventory.numFood > 0);
-        worldData.Add("hasWater", inventory.numWater > 0);
+        //worldData.Add("hasWater", inventory.numWater > 0);
         worldData.Add("hasTarget", agent.Target != null);
-        worldData.Add("nearTarget", agent.NearTarget);
-        worldData.Add("maslowLevel", agent.MasLevel);
+        //worldData.Add("nearTarget", agent.NearTarget);
+        //worldData.Add("maslowLevel", agent.MasLevel);
         worldData.Add("hasRole", false);
         worldData.Add("RecievedWork", recievedWork);
         worldData.Add("FinishedWork", finishedWork);
         
 
-        worldData.Add("nearBlackBoard", IsNearBlackBoard());
+        //worldData.Add("nearBlackBoard", IsNearBlackBoard());
 
         return worldData;
     }
@@ -105,14 +105,23 @@ public class VillagerRole : MonoBehaviour, IGoap
         // that it can succeed.
         Debug.Log("<color=red>Plan Aborted</color> " + aborter);
     }
-    
+
+    public object CheckWorldState(string keyToCheck)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    /*
     public bool IsNearBlackBoard()
     {
+        
         if(agent.NearTarget && agent.Target == agent.BlackBoard.gameObject)
         {
             return true;
         }
 
         return false;
+        
     }
+    */
 }
